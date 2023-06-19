@@ -29,27 +29,59 @@
 
 
 
-    $.getJSON("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
-      .then(data => {
-        deckId = data.deck_id;
-      })
-      .catch(error => {
-        console.log("Oops, there was an error:", error);
+    // $.getJSON("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+    //   .then(data => {
+    //     deckId = data.deck_id;
+    //   })
+    //   .catch(error => {
+    //     console.log("Oops, there was an error:", error);
+    //   });
+
+
+    // $('button').click(() => {
+    //   $.getJSON(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
+    //     .then(data => {
+    //       const card = data.cards[0];
+    //       $('#card-area').append(`<img src="${card.image}" alt="${card.value} of ${card.suit}">`);
+    //       if (data.remaining === 0) {
+    //         $('button').attr('disabled', true);
+    //         console.log('No more cards in the deck.');
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log("Oops, there was an error:", error);
+    //     });
+    // });
+    // ;
+
+    const createDeck = async () => {
+        return $.getJSON("https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
+          .then(data => {
+            deckId = data.deck_id;
+          })
+          .catch(error => {
+            console.log("Oops, there was an error:", error);
+          });
+      };
+    
+      const drawCard = async () => {
+        return $.getJSON(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
+          .then(data => {
+            const card = data.cards[0];
+            $('#card-area').append(`<img src="${card.image}" alt="${card.value} of ${card.suit}">`);
+            if (data.remaining === 0) {
+              $('button').attr('disabled', true);
+              console.log('No more cards in the deck.');
+            }
+          })
+          .catch(error => {
+            console.log("Oops, there was an error:", error);
+          });
+      };
+    
+
+      createDeck();
+      $('button').click(() => {
+        drawCard();
       });
-
-
-    $('button').click(() => {
-      $.getJSON(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`)
-        .then(data => {
-          const card = data.cards[0];
-          $('#card-area').append(`<img src="${card.image}" alt="${card.value} of ${card.suit}">`);
-          if (data.remaining === 0) {
-            $('button').attr('disabled', true);
-            console.log('No more cards in the deck.');
-          }
-        })
-        .catch(error => {
-          console.log("Oops, there was an error:", error);
-        });
-    });
-    ;
+      ;
